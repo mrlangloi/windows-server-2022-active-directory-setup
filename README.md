@@ -41,7 +41,56 @@ Once installed, the virtual machine should reboot and then present a password se
 
 After setting up a password, login to the Administrator account using the password
 
+From this point and onwards the Windows Server 2022 180-days free trial kicks in, so once it expires, we can build and install Windows Server 2022 onto a new virtual machine again from scratch
+
 Now, we need to install Active Directory tools
 
 ## Install Active Directory Tools
+
+Upon logging in as Administrator, we are presented with "Server Manager" in our taskbar
+
+<img width="1023" height="724" alt="image" src="https://github.com/user-attachments/assets/51ada4d9-a81b-48c7-8660-8134d8827d6e" />
+
+At the top-right of the Server Manager window, click on "Manage" > "Add Roles and Feature"
+
+<img width="321" height="172" alt="image" src="https://github.com/user-attachments/assets/0e9822b6-f772-4c42-a59b-069323de5b96" />
+
+Continue with these settings
+
+<img width="614" height="435" alt="image" src="https://github.com/user-attachments/assets/b8e5a40c-8b62-4988-9ccc-d7d6719ec271" />
+<img width="615" height="435" alt="image" src="https://github.com/user-attachments/assets/92a928e3-bf02-4ba8-8291-e58978fc3172" />
+
+In the "Server Roles" section, check the box for "Active Directory Domain Services", "Remote Access", and "DNS Server"
+
+<img width="614" height="437" alt="image" src="https://github.com/user-attachments/assets/0e71b8ff-0fcf-484d-9883-92d64f4a65de" />
+
+In the "Features" section, ensure that the checkbox for "Group Policy Management" is checked (should be on by default from "Active Directory Domain Services")
+
+In the "Remote Access" > "Role Services" section, check the box for "DirectAccess and VPN (RAS)"
+
+<img width="779" height="554" alt="image" src="https://github.com/user-attachments/assets/3790bd25-fc0b-40ca-a8b9-b2541ac7e404" />
+
+Proceed with clicking "Next" on each window, and hit "Install" at the final step at "Results"
+
+**Once the installation is done, click on "Promote this server to a domain controller"**
+
+In the "Deployment Configuration" section, select "Add a new forest", and then specify a name to be as the root domain name (adding a '.local' at the end of the root domain name)
+
+<img width="631" height="432" alt="image" src="https://github.com/user-attachments/assets/7d944787-0efe-4aa3-9525-b735fd0e7c2f" />
+
+In the "Domain Controller Options" section, ensure that both "Forest functional level:" and "Domain functional level:" are set to the latest Windows Server version (at time of writing is Windows Server 2016)
+
+Set a password in the "Directory Services Restore Mode (DSRM)" fields
+
+<img width="623" height="455" alt="image" src="https://github.com/user-attachments/assets/a5eda230-7222-462e-9345-9feca10260d9" />
+
+Proceed with clicking "Next" on each window, and hit "Install" at the "Prerequisites Check" section (it should take a few minutes)
+
+Afterwards, the virtual machine should automatically reboot
+
+Upon logging in as Administrator, we should now see that we are logging in as "-root domain name-/Administrator"
+
+To verify our installation, we should see the "Windows Administrative Tools" folder in the Windows start menu
+
+## Basic Active Directory Setup
 
