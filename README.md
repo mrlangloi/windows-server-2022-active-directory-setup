@@ -194,3 +194,169 @@ Repeat the entire process for the "Europe" and "Asia" OUs (creating the groups a
 # Creating and Setting up GPOs
 
 Group Policy Object (GPO) is the term for the collection of policies in Active Directory that can be applied to the domains and OUs. GPOs are typically used by admins to manage settings that are applied to users and computers
+
+Open "Group Policy Management"
+
+Inside this application, we can see the domains and OUs we have created inside Active Directory
+
+<img width="750" height="527" alt="image" src="https://github.com/user-attachments/assets/b9b7645c-6a8f-4046-9198-132991d9d014" />
+
+To see what GPOs are like, expand the "Group Policy Objects" folder, right-click "Default Domain Controller Policy" > "Edit..."
+
+This opens up the editor for GPOs where we can create different policies for the domain
+
+<img width="782" height="560" alt="image" src="https://github.com/user-attachments/assets/0a4d9ae6-eae3-4bbf-8207-486a1f3bfd1e" />
+
+To know what GPOs we want to create, we need to familiarize ourselves with the differences between "Computer Configuration" vs. "User Configuration", and "Policies" vs. "Preferences"
+
+**Computer Configuration**
+* Settings in this node apply to the local computer, regardless of who is logged in. These are system-wide changes that affect the hardware, security, and OS behavior
+* Policies are applied as soon as you see the Windows logo, before the user logs in
+
+**User Configuration**
+* Settings in this node follow the user. Whether they log into a desktop, a laptop, or a terminal server, their specific environment will "roam" with them
+* Policies are applied as soon as the user enters their password and hits "Enter"
+
+**Policies**
+* Can't be changed by users
+* Password policies, account lockout policies
+
+**Preferences**
+* Can be changed by users
+* Mapped network drives, printers, desktop shortcuts
+
+
+## Activity 1: Set a password policy to enforce strong passwords and enhance security
+
+Right-click on the .local domain name > "Create a GPO in this domain, and Link it here..."
+
+Name this GPO policy "Password Policy", and click "Ok"
+
+Right-click on "Password Policy" > "Edit..."
+
+This is where we can set up and configure our password policies
+
+This policy should be under "Computer Configuration" because it is the computer that defines the security standard for the domain or machine
+
+This policy should also be under "Policies" because it should never be altered by the user
+
+We can find the password policy under "Computer Configuration" > "Policies" > "Windows Settings" > "Security Settings" > "Account Policies" > "Password Policy"
+
+<img width="783" height="561" alt="image" src="https://github.com/user-attachments/assets/d944e3d4-7571-47db-9815-6911f0a29d85" />
+
+From here, we can see all the different settings we can change for the GPO
+
+To enable a policy, double-click on a policy, check the "Define this policy setting" box, fill out the form, hit "Apply" and "Ok"
+
+
+## Activity 2: Map network drives for users when they log in
+
+To explain this policy, what we are creating is a pointer to a folder inside the server, which users can access that pointer as a network drive. Why this is created as a network drive is to avoid long nested directories like "\A\B\C\D\E\folder", when users can just access that pointer as "E:\folder"
+
+Right-click on the .local domain name > "Create a GPO in this domain, and Link it here..."
+
+Name this GPO policy "Drive Mapping", and click "Ok"
+
+Right-click on "Drive Mapping" > "Edit..."
+
+This policy should be under "User Configuration" because we need this policy to follow the user on whichever device they use to log in
+
+This policy should also be under "Preferences" because the user can add drive maps if they choose to
+
+We can find the drive maps policy under "User Configuration" > "Preferences" > "Windows Settings" > "Drive Maps"
+
+<img width="783" height="561" alt="image" src="https://github.com/user-attachments/assets/656dbcf6-0827-4102-9366-31a1784f39e6" />
+
+Right-click "Drive Maps" > "New" > "Mapped Drive"
+
+In this window, we can set a folder that users under the GPO can access as a drive label
+
+<img width="397" height="451" alt="image" src="https://github.com/user-attachments/assets/220977d5-9f56-454d-96af-099ac5e775a1" />
+
+After setting the location and drive letter, hit "Apply" and "Ok"
+
+
+## Activity 3: Set a default desktop wallpaper for all users
+
+Right-click on the .local domain name > "Create a GPO in this domain, and Link it here..."
+
+Name this GPO policy "Desktop Wallpaper", and click "Ok"
+
+Right-click on "Desktop Wallpaper" > "Edit..."
+
+This policy should be under "User Configuration" because we need this policy to follow the user on whichever device they use to log in
+
+This policy should be under "Policies" because we do not want to user to change their desktop wallpaper
+
+We can find the desktop wallpaper policy under "User Configuration" > "Policies" > "Administrative Templates: ..." > "Desktop" > "Desktop"
+
+<img width="784" height="561" alt="image" src="https://github.com/user-attachments/assets/8c65cbf9-c812-4196-ab04-faa5bbecfa86" />
+
+Double-click "Desktop Wallpaper", and enable the policy at the left-side of the window
+
+To set a custom wallpaper, set the wallpaper path and style underneath the "Options:" section, and then hit "Apply" and "Ok"
+
+
+## Activity 4: Prevent users from accessing the Control Panel
+
+Right-click on the .local domain name > "Create a GPO in this domain, and Link it here..."
+
+Name this GPO policy "Restrict Control Panel", and click "Ok"
+
+Right-click on "Restrict Control Panel" > "Edit..."
+
+This policy should be under "User Configuration" because we need this policy to follow the user on whichever device they use to log in
+
+This policy should be under "Policies" because it should be enforced that the Control Panel is restricted, no changes can be made
+
+We can find the Control Panel policies under "User Configuration" > "Policies" > "Administrative Templates: ..." > "Control Panel"
+
+<img width="783" height="561" alt="image" src="https://github.com/user-attachments/assets/a413327a-6893-438b-a984-fe8fba2d3354" />
+
+Double-click "Prohibit access to Control Panel and PC settings", enable the policy, and then hit "Apply" and "Ok"
+
+<img width="682" height="632" alt="image" src="https://github.com/user-attachments/assets/1af43306-3784-4b40-9f70-573492594266" />
+
+
+## Activity 5: Prevent users from using USB storage devices
+
+Right-click on the .local domain name > "Create a GPO in this domain, and Link it here..."
+
+Name this GPO policy "Disable USB Devices", and click "Ok"
+
+Right-click on "Disable USB Devices" > "Edit..."
+
+This policy should be under "Computer Configuration" because we want the USB ports to be locked down the moment the computer boots up, eliminating any kind of bypassing
+
+This policy should be under "Policies" because it should be enforced that the USB devices are restricted, no changes can be made
+
+We can find the USB storage device policies under "Computer Configuration" > "Policies" > "Administrative Templates: ..." > "System" > "Removable Storage Access"
+
+<img width="783" height="561" alt="image" src="https://github.com/user-attachments/assets/00a864c3-176a-4eae-a795-c65e7d00c15c" />
+
+Double-click "All Removable Storage classes: Deny all access", enable the policy, and then hit "Apply" and "Ok"
+
+<img width="682" height="633" alt="image" src="https://github.com/user-attachments/assets/cf37ab6a-a8cb-4f2b-82ea-451c2fb7f0db" />
+
+
+## Activity 6: Configure account lockout settings to prevent brute-force attacks
+
+Right-click on the .local domain name > "Create a GPO in this domain, and Link it here..."
+
+Name this GPO policy "Account Lockout Policy", and click "Ok"
+
+Right-click on "Account Lockout Policy" > "Edit..."
+
+This policy should be under "Computer Configuration" because we want the computer to lock down before the user logs in after a number of attempts
+
+This policy should be under "Policies" because it should be enforced that the accounts are locked out after a certain number of attempts, no changes can be made
+
+We can find the Account Lockout policy under "Computer Configuration" > "Policies" > "Windows Settings" > "Security Settings" > "Account Policies" > "Account Lockout Policy"
+
+<img width="783" height="560" alt="image" src="https://github.com/user-attachments/assets/a770dc8b-e299-4fd2-ad61-40f4905a15cb" />
+
+Double-click "Account lockout threshold", enable the policy, set a threshold, hit "Apply" and "Ok"
+
+
+# Applying and Testing GPOs
+
