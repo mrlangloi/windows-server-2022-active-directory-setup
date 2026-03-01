@@ -6,7 +6,7 @@ The following setup guide is derived from East Charmer's [**Installing Active Di
 * Windows Server 2022 ISO https://www.microsoft.com/en-us/evalcenter/download-windows-server-2022
 * VMWare Workstation Pro https://knowledge.broadcom.com/external/article?articleNumber=368667
 
-## Creating a Virtual Machine
+# Creating a Virtual Machine
 
 After installing VMWare Workstation Pro and downloading the Windows Server 2022 ISO, we can begin with setting up a virtual machine that runs Windows Server 2022 by opening up VMWare Workstation Pro and clicking on "Create a New Virtual Machine"
 
@@ -45,7 +45,7 @@ From this point and onwards the Windows Server 2022 180-days free trial kicks in
 
 Now, we need to install Active Directory tools
 
-## Install Active Directory Tools
+# Install Active Directory Tools
 
 Upon logging in as Administrator, we are presented with "Server Manager" in our taskbar
 
@@ -92,5 +92,105 @@ Upon logging in as Administrator, we should now see that we are logging in as "-
 
 To verify our installation, we should see the "Windows Administrative Tools" folder in the Windows start menu
 
-## Basic Active Directory Setup
+# Basic Active Directory Setup
 
+Terms to know
+* Forest
+  * What it is
+    * The entire "Tree" (e.g., all of .local)
+  * Relation to group scopes
+    * The ultimate limit for Universal groups
+* Domain
+  * What it is
+    * The partition (e.g., sales.corp.local)
+  * Relation to group scopes
+    * The primary boundary for Domain Local/Global scopes
+* Organizational Unit (OU)
+  * What it is
+    * A folder inside the domain
+  * Relation to group scopes
+    * Irrelevant to how scopes function
+
+Open "Active Directory Users and Computers"
+
+On the left column, we should see the created .local directory which we can expand to see the subdirectories it comes with
+
+We want to create OUs for different departments
+
+Right-click on the domain name > New > Organizational Unit
+
+<img width="587" height="463" alt="image" src="https://github.com/user-attachments/assets/ade3f8d8-a58e-4221-8a39-187f752256a6" />
+
+Create 3 OUs under the name "Canada", "Europe", and "Asia"
+
+<img width="193" height="184" alt="image" src="https://github.com/user-attachments/assets/25b8be00-4d52-487b-955e-6ee2e5712670" />
+
+Next, we want to create user accounts and groups within these OUs by nesting OUs
+
+Inside each of the geographical OUs created, create 3 OUs under the name "Computers", "Users", and "Servers"
+
+<img width="226" height="383" alt="image" src="https://github.com/user-attachments/assets/c432a604-1f35-4ae7-a5b6-aaaea89567ba" />
+
+Next, we want to create different groups under the nested OUs to mimick a typical workplace environment (e.g., different company departments under "Users")
+
+Right-click on "Users" under "Canada" > New > Group
+
+<img width="465" height="223" alt="image" src="https://github.com/user-attachments/assets/eb16cba7-638d-41ca-b848-ddeef2d9528a" />
+
+Before proceeding, we can familiarize ourselves with the different options this window presents
+
+**Group scope**
+* Domain local
+  * Membership: anywhere in the forest
+  * Permissions: within the same local domain (the .local name)
+* Global
+  * Membership: only the local domain (the .local name)
+  * Permissions: anywhere in the forest
+* Universal
+  * Membership: anywhere in the forest
+  * Permissions: anywhere in the forest
+
+**Group type**
+* Security: used to assign permissions to shared resources
+  * Assign user rights
+    * Built-in security groups
+      * Domain admins for IT staff
+      * Remote Desktop Users: users who needs remote access
+    * Custom security groups
+      * Finance department: access financial applications and data
+      * HR department
+  * Assign permissions (for a shared resource): determines who can access certain resources and level of access (full control, read, modify)
+    * File and folder permissions
+    * Printer permissions
+    * Shared network permissions
+* Distribution: used to create email distribution lists to send email to collections of users by using an email application like Exchange Server
+  * All employees
+  * Department-based (finance, IT, HR)
+  * Role-based (executives, managers, admins)
+
+Set the "Group name:" to "IT"
+
+Leave the "Group type" to "Security" because it's going to provide user rights only to the "IT" department
+
+Create another group under "Canada" > "Users" and name it "DL-ITAdmins" (short for "distribution list for IT admins")
+
+Set the "Group type" to "Distribution" because we want this to be an email list for all IT users
+
+Now we can start creating different users
+
+Right-click on "Users" under "Canada" > New > User
+
+Fill out the form as follows
+
+<img width="434" height="376" alt="image" src="https://github.com/user-attachments/assets/205153f2-043b-4189-b18f-575daf208768" />
+<img width="435" height="376" alt="image" src="https://github.com/user-attachments/assets/8405e93e-3cfd-4478-a0f9-cc5f562bdfb2" />
+
+**Optional: create the groups "Accounting", "HR", "Sales", and "Management", all under the "Security" group type**
+
+<img width="525" height="302" alt="image" src="https://github.com/user-attachments/assets/07506394-614b-421a-891d-1b414bcea6b9" />
+
+Repeat the entire process for the "Europe" and "Asia" OUs (creating the groups and a user)
+
+# Creating and Setting up GPOs
+
+Group Policy Object (GPO) is the term for the collection of policies in Active Directory that can be applied to the domains and OUs. GPOs are typically used by admins to manage settings that are applied to users and computers
