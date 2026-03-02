@@ -360,3 +360,121 @@ Double-click "Account lockout threshold", enable the policy, set a threshold, hi
 
 # Applying and Testing GPOs
 
+## Required
+* Windows 11 Enterprise ISO https://www.microsoft.com/en-us/evalcenter/download-windows-11-enterprise
+
+
+### Creating a Windows 11 Enterprise VM
+
+Create a new blank VM, with this time changing the operating system version to "Windows 11 x64"
+
+<img width="422" height="421" alt="image" src="https://github.com/user-attachments/assets/9734f30e-ca7e-462b-bb1f-2d2b265f0062" />
+
+In the window that specifies disk capacity, I'm using 32.0 GB and keep the default "Split virtual disk into multiple files". Afterwards, we should now have created our blank Windows 11 virtual machine
+
+Right-click on the newly created virtual machine and click "Settings". Under "CD/DVD (SATA)" we want to check the box "Connected at power on", set "Connection" to "Use ISO image file:", and browse for the Windows 11 Enterprise ISO file (26200.6584.250915-1905.25h2_ge_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso)
+
+<img width="749" height="303" alt="image" src="https://github.com/user-attachments/assets/8ccaf0f1-1299-4f2c-ac5c-1bef5c47b6a6" />
+
+Install Windows 11 Enterprise, just like how we did for the Windows Server 2022
+
+While Windows 11 Enterprise is installing, we want to set our server to use a static IP address
+
+### Setting up a Server Static IP
+
+On the Windows Server VM, right-click on the Windows logo at the bottom-left of the taskbar > "Windows PowerShell"
+
+This opens up the terminal that we can use to find the current IP address to set as static
+
+Run the command "ipconfig"
+
+We should now see the IP configuration that we want to set as static
+
+<img width="718" height="303" alt="image" src="https://github.com/user-attachments/assets/05eef2c2-a58b-46dc-80aa-143d47cac079" />
+
+Keep this terminal open, and proceed with the next step
+
+Open up "Settings" > "Network & Internet" > "Change adapter options" > Right-click on "Ethernet0" > "Properties" > "Internet Protocol Version 4 (TCP/IPv4)" > "Properties"
+
+**If you are unable to access "Settings" because it closes every time it opens, unlink "Restrict Control Panel" policy from `-root domain name-.local` and run `gpupdate /force` in a terminal**
+
+Fill in the fields using the corresponding IP addresses found in the terminal window, and hit "Ok"
+
+<img width="394" height="450" alt="image" src="https://github.com/user-attachments/assets/4f18facd-6f01-4f15-9b47-813b75e04936" />
+
+We have now set the current IP address as static, which we will later use as the DNS server IP on our client machines
+
+In the Windows 11 Enterprise setup, if prompted for a Microsoft account login, click "Show more options" > "Domain join instead"
+
+To add the Windows 11 Enterprise VM into the domain, we first need to set up the DNS to point to the server
+
+On the Windows 11 Enterprise VM, open up "Settings" > "Network & Internet" > "Properties" > "DNS server assignment:" > "Edit"
+
+Change the dropdown box from "Automatic (DHCP)" to "Manual", set the "Preferred DNS" to the server's static IPv4 address, and then hit "Save"
+
+<img width="478" height="590" alt="image" src="https://github.com/user-attachments/assets/b901df5d-46bc-4a14-a172-20717106c2fa" />
+
+To verify that we have connectivity with our domain controller, we can run `ping -static server IP-` in a terminal
+
+<img width="540" height="240" alt="image" src="https://github.com/user-attachments/assets/b5ee8b04-63ef-45b4-8d44-86d880fb8b6e" />
+
+To also test if the domain controller is working, we can run `nslookup -root domain name-.local` in a terminal, and it should resolve the DNS
+
+<img width="330" height="123" alt="image" src="https://github.com/user-attachments/assets/3cac5a2d-16a6-4f49-9dcc-3aa077b7dedc" />
+
+
+### Joining the Computer to the Domain
+
+On the Windows 11 Enterprise VM, open "Settings" > "System" > "About" > "Related links" > "Domain or workgroup"
+
+In this window, click the "Change..." button on "To rename a computer or change its domain or workgroup, click Change."
+
+<img width="403" height="459" alt="image" src="https://github.com/user-attachments/assets/3243bdba-0e43-4e3c-8db6-2d6590904328" />
+
+Change the name of the PC to something memorable and identifiable
+
+Change the "Member of" option to "Domain:", set the text field to `-root domain name-.local`, and then hit "Ok"
+
+<img width="319" height="382" alt="image" src="https://github.com/user-attachments/assets/a814b203-41bd-4d83-a38b-04d3ff606e84" />
+
+If prompted to enter credentials, enter `administrator` as the user and `-server password-` as the password
+
+Restart the Windows 11 Enterprise VM for the changes to apply
+
+Upon signing in to a user account, click "Other user" and try logging in with a user account created in the server's active directory
+
+Now that we have joined the Windows 11 Enterprise VM to the domain, we need to move the machine to its respective OU
+
+On the Windows Server 2022 VM, open "Active Directory Users and Computers"
+
+Inside "`-root domain name-.local`" > "Computers", we should see the name of the Windows 11 Enterprise PC
+
+Right-click the PC name > "Move..." > "Canada" > "Computers"
+
+<img width="314" height="323" alt="image" src="https://github.com/user-attachments/assets/2acf9c43-c5ae-40eb-8537-d435fd548fca" />
+
+Hit "Ok" and the PC should be moved to the "`-root domain name-.local`" > "Canada" > "Computers" OU
+
+
+### Applying GPOs
+
+On the Windows Server 2022 VM, open "Group Policy Management"
+
+Expand the "Group Policy Objects" folder, and we can see all the GPOs we have created
+
+<img width="749" height="526" alt="image" src="https://github.com/user-attachments/assets/1db6e9ee-2216-4d97-902c-f459e916a6fe" />
+
+To apply a GPO to an OU, simply drag-and-drop the GPOs that you want to apply from the "Group Policy Objects" folder onto the destination OU
+
+<img width="749" height="525" alt="image" src="https://github.com/user-attachments/assets/825b44e9-fc31-4418-b739-5e66cab0d26b" />
+
+However, the GPO does not apply immediately
+
+We can change this by running `gpupdate /force` on the client machine that has the GPO applied to
+
+<img width="473" height="165" alt="image" src="https://github.com/user-attachments/assets/78bf9caf-3a38-4365-88bf-4d8d893f1f5c" />
+
+
+# Setting up Network Sharing on Windows Server
+
+
