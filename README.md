@@ -88,7 +88,7 @@ Proceed with clicking "Next" on each window, and hit "Install" at the "Prerequis
 
 Afterwards, the virtual machine should automatically reboot
 
-Upon logging in as Administrator, we should now see that we are logging in as "-root domain name-/Administrator"
+Upon logging in as Administrator, we should now see that we are logging in as `-root domain name-/Administrator`
 
 To verify our installation, we should see the "Windows Administrative Tools" folder in the Windows start menu
 
@@ -121,19 +121,19 @@ Right-click on the domain name > New > Organizational Unit
 
 <img width="587" height="463" alt="image" src="https://github.com/user-attachments/assets/ade3f8d8-a58e-4221-8a39-187f752256a6" />
 
-Create 3 OUs under the name "Canada", "Europe", and "Asia"
+Create 3 OUs under the name `Canada`, `Europe`, and `Asia`
 
 <img width="193" height="184" alt="image" src="https://github.com/user-attachments/assets/25b8be00-4d52-487b-955e-6ee2e5712670" />
 
 Next, we want to create user accounts and groups within these OUs by nesting OUs
 
-Inside each of the geographical OUs created, create 3 OUs under the name "Computers", "Users", and "Servers"
+Inside each of the geographical OUs created, create 3 OUs under the name `Computers`, `Users`, and `Servers`
 
 <img width="226" height="383" alt="image" src="https://github.com/user-attachments/assets/c432a604-1f35-4ae7-a5b6-aaaea89567ba" />
 
 Next, we want to create different groups under the nested OUs to mimick a typical workplace environment (e.g., different company departments under "Users")
 
-Right-click on "Users" under "Canada" > New > Group
+Right-click on `Users` under `Canada` > New > Group
 
 <img width="465" height="223" alt="image" src="https://github.com/user-attachments/assets/eb16cba7-638d-41ca-b848-ddeef2d9528a" />
 
@@ -168,24 +168,24 @@ Before proceeding, we can familiarize ourselves with the different options this 
   * Department-based (finance, IT, HR)
   * Role-based (executives, managers, admins)
 
-Set the "Group name:" to "IT"
+Set the "Group name:" to `IT`
 
-Leave the "Group type" to "Security" because it's going to provide user rights only to the "IT" department
+Leave the "Group type" to "Security" because it's going to provide user rights only to the `IT` department
 
-Create another group under "Canada" > "Users" and name it "DL-ITAdmins" (short for "distribution list for IT admins")
+Create another group under `Canada` > `Users` and name it `DL-ITAdmins` (short for "distribution list for IT admins")
 
 Set the "Group type" to "Distribution" because we want this to be an email list for all IT users
 
 Now we can start creating different users
 
-Right-click on "Users" under "Canada" > New > User
+Right-click on `Users` under `Canada` > "New" > "User"
 
 Fill out the form as follows
 
 <img width="434" height="376" alt="image" src="https://github.com/user-attachments/assets/205153f2-043b-4189-b18f-575daf208768" />
 <img width="435" height="376" alt="image" src="https://github.com/user-attachments/assets/8405e93e-3cfd-4478-a0f9-cc5f562bdfb2" />
 
-**Optional: create the groups "Accounting", "HR", "Sales", and "Management", all under the "Security" group type**
+**Optional: create the groups `Accounting`, `HR`, `Sales`, and `Management`, all under the `Security` group type**
 
 <img width="525" height="302" alt="image" src="https://github.com/user-attachments/assets/07506394-614b-421a-891d-1b414bcea6b9" />
 
@@ -230,9 +230,9 @@ To know what GPOs we want to create, we need to familiarize ourselves with the d
 
 Right-click on the .local domain name > "Create a GPO in this domain, and Link it here..."
 
-Name this GPO policy "Password Policy", and click "Ok"
+Name this GPO policy `Password Policy`, and click "OK"
 
-Right-click on "Password Policy" > "Edit..."
+Right-click on `Password Policy` > "Edit..."
 
 This is where we can set up and configure our password policies
 
@@ -246,18 +246,18 @@ We can find the password policy under "Computer Configuration" > "Policies" > "W
 
 From here, we can see all the different settings we can change for the GPO
 
-To enable a policy, double-click on a policy, check the "Define this policy setting" box, fill out the form, hit "Apply" and "Ok"
+To enable a policy, double-click on a policy, check the "Define this policy setting" box, fill out the form, hit "Apply" and "OK"
 
 
 ## Activity 2: Map network drives for users when they log in
 
-To explain this policy, what we are creating is a pointer to a folder inside the server, which users can access that pointer as a network drive. Why this is created as a network drive is to avoid long nested directories like "\A\B\C\D\E\folder", when users can just access that pointer as "E:\folder"
+To explain this policy, what we are creating is a pointer to a folder inside the server, which users can access that pointer as a network drive. Why this is created as a network drive is to avoid long nested directories like `\A\B\C\D\E\folder`, when users can just access that pointer as `E:\folder`
 
 Right-click on the .local domain name > "Create a GPO in this domain, and Link it here..."
 
-Name this GPO policy "Drive Mapping", and click "Ok"
+Name this GPO policy `Drive Mapping`, and click "OK"
 
-Right-click on "Drive Mapping" > "Edit..."
+Right-click on `Drive Mapping` > "Edit..."
 
 This policy should be under "User Configuration" because we need this policy to follow the user on whichever device they use to log in
 
@@ -267,22 +267,22 @@ We can find the drive maps policy under "User Configuration" > "Preferences" > "
 
 <img width="783" height="561" alt="image" src="https://github.com/user-attachments/assets/656dbcf6-0827-4102-9366-31a1784f39e6" />
 
-Right-click "Drive Maps" > "New" > "Mapped Drive"
+Right-click `Drive Maps` > "New" > "Mapped Drive"
 
 In this window, we can set a folder that users under the GPO can access as a drive label
 
 <img width="397" height="451" alt="image" src="https://github.com/user-attachments/assets/220977d5-9f56-454d-96af-099ac5e775a1" />
 
-After setting the location and drive letter, hit "Apply" and "Ok"
+After setting the location and drive letter, hit "Apply" and "OK"
 
 
 ## Activity 3: Set a default desktop wallpaper for all users
 
 Right-click on the .local domain name > "Create a GPO in this domain, and Link it here..."
 
-Name this GPO policy "Desktop Wallpaper", and click "Ok"
+Name this GPO policy `Desktop Wallpaper`, and click "OK"
 
-Right-click on "Desktop Wallpaper" > "Edit..."
+Right-click on `Desktop Wallpaper` > "Edit..."
 
 This policy should be under "User Configuration" because we need this policy to follow the user on whichever device they use to log in
 
@@ -292,18 +292,18 @@ We can find the desktop wallpaper policy under "User Configuration" > "Policies"
 
 <img width="784" height="561" alt="image" src="https://github.com/user-attachments/assets/8c65cbf9-c812-4196-ab04-faa5bbecfa86" />
 
-Double-click "Desktop Wallpaper", and enable the policy at the left-side of the window
+Double-click `Desktop Wallpaper`, and enable the policy at the left-side of the window
 
-To set a custom wallpaper, set the wallpaper path and style underneath the "Options:" section, and then hit "Apply" and "Ok"
+To set a custom wallpaper, set the wallpaper path and style underneath the "Options:" section, and then hit "Apply" and "OK"
 
 
 ## Activity 4: Prevent users from accessing the Control Panel
 
 Right-click on the .local domain name > "Create a GPO in this domain, and Link it here..."
 
-Name this GPO policy "Restrict Control Panel", and click "Ok"
+Name this GPO policy `Restrict Control Panel`, and click "OK"
 
-Right-click on "Restrict Control Panel" > "Edit..."
+Right-click on `Restrict Control Panel` > "Edit..."
 
 This policy should be under "User Configuration" because we need this policy to follow the user on whichever device they use to log in
 
@@ -313,7 +313,7 @@ We can find the Control Panel policies under "User Configuration" > "Policies" >
 
 <img width="783" height="561" alt="image" src="https://github.com/user-attachments/assets/a413327a-6893-438b-a984-fe8fba2d3354" />
 
-Double-click "Prohibit access to Control Panel and PC settings", enable the policy, and then hit "Apply" and "Ok"
+Double-click "Prohibit access to Control Panel and PC settings", enable the policy, and then hit "Apply" and "OK"
 
 <img width="682" height="632" alt="image" src="https://github.com/user-attachments/assets/1af43306-3784-4b40-9f70-573492594266" />
 
@@ -322,9 +322,9 @@ Double-click "Prohibit access to Control Panel and PC settings", enable the poli
 
 Right-click on the .local domain name > "Create a GPO in this domain, and Link it here..."
 
-Name this GPO policy "Disable USB Devices", and click "Ok"
+Name this GPO policy `Disable USB Devices`, and click "OK"
 
-Right-click on "Disable USB Devices" > "Edit..."
+Right-click on `Disable USB Devices` > "Edit..."
 
 This policy should be under "Computer Configuration" because we want the USB ports to be locked down the moment the computer boots up, eliminating any kind of bypassing
 
@@ -334,7 +334,7 @@ We can find the USB storage device policies under "Computer Configuration" > "Po
 
 <img width="783" height="561" alt="image" src="https://github.com/user-attachments/assets/00a864c3-176a-4eae-a795-c65e7d00c15c" />
 
-Double-click "All Removable Storage classes: Deny all access", enable the policy, and then hit "Apply" and "Ok"
+Double-click "All Removable Storage classes: Deny all access", enable the policy, and then hit "Apply" and "OK"
 
 <img width="682" height="633" alt="image" src="https://github.com/user-attachments/assets/cf37ab6a-a8cb-4f2b-82ea-451c2fb7f0db" />
 
@@ -343,9 +343,9 @@ Double-click "All Removable Storage classes: Deny all access", enable the policy
 
 Right-click on the .local domain name > "Create a GPO in this domain, and Link it here..."
 
-Name this GPO policy "Account Lockout Policy", and click "Ok"
+Name this GPO policy `Account Lockout Policy`, and click "OK"
 
-Right-click on "Account Lockout Policy" > "Edit..."
+Right-click on `Account Lockout Policy` > "Edit..."
 
 This policy should be under "Computer Configuration" because we want the computer to lock down before the user logs in after a number of attempts
 
@@ -355,7 +355,7 @@ We can find the Account Lockout policy under "Computer Configuration" > "Policie
 
 <img width="783" height="560" alt="image" src="https://github.com/user-attachments/assets/a770dc8b-e299-4fd2-ad61-40f4905a15cb" />
 
-Double-click "Account lockout threshold", enable the policy, set a threshold, hit "Apply" and "Ok"
+Double-click "Account lockout threshold", enable the policy, set a threshold, hit "Apply" and "OK"
 
 
 # Applying and Testing GPOs
@@ -372,7 +372,7 @@ Create a new blank VM, with this time changing the operating system version to "
 
 In the window that specifies disk capacity, I'm using 32.0 GB and keep the default "Split virtual disk into multiple files". Afterwards, we should now have created our blank Windows 11 virtual machine
 
-Right-click on the newly created virtual machine and click "Settings". Under "CD/DVD (SATA)" we want to check the box "Connected at power on", set "Connection" to "Use ISO image file:", and browse for the Windows 11 Enterprise ISO file (26200.6584.250915-1905.25h2_ge_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso)
+Right-click on the newly created virtual machine and click "Settings". Under "CD/DVD (SATA)" we want to check the box "Connected at power on", set "Connection" to "Use ISO image file:", and browse for the Windows 11 Enterprise ISO file (`26200.6584.250915-1905.25h2_ge_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso`)
 
 <img width="749" height="303" alt="image" src="https://github.com/user-attachments/assets/8ccaf0f1-1299-4f2c-ac5c-1bef5c47b6a6" />
 
@@ -386,7 +386,7 @@ On the Windows Server VM, right-click on the Windows logo at the bottom-left of 
 
 This opens up the terminal that we can use to find the current IP address to set as static
 
-Run the command "ipconfig"
+Run the command `ipconfig`
 
 We should now see the IP configuration that we want to set as static
 
@@ -398,7 +398,7 @@ Open up "Settings" > "Network & Internet" > "Change adapter options" > Right-cli
 
 **If you are unable to access "Settings" because it closes every time it opens, unlink "Restrict Control Panel" policy from `-root domain name-.local` and run `gpupdate /force` in a terminal**
 
-Fill in the fields using the corresponding IP addresses found in the terminal window, and hit "Ok"
+Fill in the fields using the corresponding IP addresses found in the terminal window, and hit "OK"
 
 <img width="394" height="450" alt="image" src="https://github.com/user-attachments/assets/4f18facd-6f01-4f15-9b47-813b75e04936" />
 
@@ -433,7 +433,7 @@ In this window, click the "Change..." button on "To rename a computer or change 
 
 Change the name of the PC to something memorable and identifiable
 
-Change the "Member of" option to "Domain:", set the text field to `-root domain name-.local`, and then hit "Ok"
+Change the "Member of" option to "Domain:", set the text field to `-root domain name-.local`, and then hit "OK"
 
 <img width="319" height="382" alt="image" src="https://github.com/user-attachments/assets/a814b203-41bd-4d83-a38b-04d3ff606e84" />
 
@@ -453,7 +453,7 @@ Right-click the PC name > "Move..." > "Canada" > "Computers"
 
 <img width="314" height="323" alt="image" src="https://github.com/user-attachments/assets/2acf9c43-c5ae-40eb-8537-d435fd548fca" />
 
-Hit "Ok" and the PC should be moved to the "`-root domain name-.local`" > "Canada" > "Computers" OU
+Hit "OK" and the PC should be moved to the "`-root domain name-.local`" > "Canada" > "Computers" OU
 
 
 ### Applying GPOs
@@ -499,13 +499,13 @@ Click on "Add..." to add users to the sharing permissions
 
 In the "Enter the object names to select (examples):" text field, enter `domain` and click "Check Names"
 
-Select "Domain Users" and click "Ok", we'll leave its permissions set to Read only
+Select "Domain Users" and click "OK", we'll leave its permissions set to Read only
 
 <img width="357" height="447" alt="image" src="https://github.com/user-attachments/assets/790fe393-412b-4e20-b398-7c6b27a4f7d7" />
 
 Everyone who is a domain user can open up this `SHARED` folder
 
-Hit "Apply" and "Ok" to close out the "Advanced Sharing..." window
+Hit "Apply" and "OK" to close out the "Advanced Sharing..." window
 
 Over to the "Security" tab, we can see more detailed permissions
 
@@ -567,7 +567,7 @@ In this window, we'll set up the same folder location as how we set it up in the
 
 <img width="394" height="450" alt="image" src="https://github.com/user-attachments/assets/717b8f69-1b1a-4719-8d64-566ed8a737bb" />
 
-After setting the location and drive letter, hit "Apply" and "Ok"
+After setting the location and drive letter, hit "Apply" and "OK"
 
 Apply the `Mapped Drives` GPO to the `Canada` > `Users` OU
 
