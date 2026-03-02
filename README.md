@@ -2,7 +2,7 @@
 
 The following setup guide is derived from East Charmer's [**Installing Active Directory on Windows Server on Virtual Machine (Home Lab)**](https://www.youtube.com/watch?v=GsmJowwIh8Q) tutorial
 
-## Required:
+### Required:
 * Windows Server 2022 ISO https://www.microsoft.com/en-us/evalcenter/download-windows-server-2022
 * VMWare Workstation Pro https://knowledge.broadcom.com/external/article?articleNumber=368667
 
@@ -360,7 +360,7 @@ Double-click "Account lockout threshold", enable the policy, set a threshold, hi
 
 # Applying and Testing GPOs
 
-## Required
+### Required
 * Windows 11 Enterprise ISO https://www.microsoft.com/en-us/evalcenter/download-windows-11-enterprise
 
 
