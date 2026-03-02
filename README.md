@@ -477,4 +477,165 @@ We can change this by running `gpupdate /force` on the client machine that has t
 
 # Setting up Network Sharing on Windows Server
 
+### Activity 1: Set up File Sharing
+
+On the Windows Server 2022 VM, open file explorer (`Windows + E`) > "This PC" > "Local Disk (C:)"
+
+Create a new folder and name it `SHARED`
+
+<img width="783" height="350" alt="image" src="https://github.com/user-attachments/assets/5ad546d5-6b30-46b4-89b1-6480b580ffc4" />
+
+Right-click on the `SHARED` folder > "Properties" > "Sharing" > "Advanced Sharing..."
+
+Check the box "Share this folder"
+
+<img width="346" height="357" alt="image" src="https://github.com/user-attachments/assets/240c4fc5-f698-4157-a92d-c40837a584b6" />
+
+Click on "Permissions" to open the permissions for `SHARED` and its configurations
+
+<img width="358" height="446" alt="image" src="https://github.com/user-attachments/assets/3aad651c-2936-4291-8a6f-67b102dd13cd" />
+
+Click on "Add..." to add users to the sharing permissions
+
+In the "Enter the object names to select (examples):" text field, enter `domain` and click "Check Names"
+
+Select "Domain Users" and click "Ok", we'll leave its permissions set to Read only
+
+<img width="357" height="447" alt="image" src="https://github.com/user-attachments/assets/790fe393-412b-4e20-b398-7c6b27a4f7d7" />
+
+Everyone who is a domain user can open up this `SHARED` folder
+
+Hit "Apply" and "Ok" to close out the "Advanced Sharing..." window
+
+Over to the "Security" tab, we can see more detailed permissions
+
+<img width="359" height="477" alt="image" src="https://github.com/user-attachments/assets/bba18778-23a4-491e-938d-4d801e18f6e3" />
+
+This window allows us to configure permissions for certain groups or users
+
+For now, we can just close the window
+
+
+### Activity 2: Set Up Sharing for Client Machines
+
+Before moving onto the client machine, we'll need the host name of the server machine
+
+On the server machine (the Windows Server 2022 VM), run `hostname` in a terminal
+
+<img width="254" height="70" alt="image" src="https://github.com/user-attachments/assets/46973693-f40b-4521-952f-488406dddb61" />
+
+This host name is what the client machine (the Windows 11 Enterprise VM) will map to
+
+On the client machine, open file explorer (`Windows + E`)
+
+Right-click "This PC" > "Map network drive..."
+
+<img width="610" height="451" alt="image" src="https://github.com/user-attachments/assets/4c75814e-fc92-4fe1-bb7c-f716446b4f9d" />
+
+Select a drive letter (in this case, we'll select drive `S:` to represent "SHARED"), and enter the path to the "SHARED" folder in the server (`\\WIN-PO55FTCNG6S\SHARED`)
+
+Uncheck the box "Reconnect at sign-in" and hit "Finish"
+
+<img width="609" height="451" alt="image" src="https://github.com/user-attachments/assets/11bee2c1-a298-42b0-9fd1-b6a5196444f8" />
+
+If we click on "This PC", we should now see a new drive `SHARED (\\WIN-PO55FTCNG6S) (S:)`
+
+However, this method poses an issue in a way such that the mapped network drive does not persist upon restarting the client machine. To access the "SHARED" folder again, we'll have to remap the network drive again. This issue will be solved on the next activity
+
+
+### Activity 3: Configure Group Policy Objects (GPOs) to Automatically Map Network Drives for Users
+
+Unlike mapped network drives in the previous activity, this is an automated way to set up network sharing for all users
+
+On the server machine, open "Group Policy Management"
+
+Right-click "Group Policy Objects" > "New", and create a new GPO named `Mapped Drives`
+
+Right-click on `Mapped Drives` > "Edit..."
+
+This policy should be under "User Configuration" because the drives are based on what the user needs
+
+This policy should be under "Preferences" because we want the users to be able to add more mapped drives if they want to
+
+We can find the drive maps policy under "User Configuration" > "Preferences" > "Windows Settings" > "Drive Maps"
+
+<img width="783" height="561" alt="image" src="https://github.com/user-attachments/assets/656dbcf6-0827-4102-9366-31a1784f39e6" />
+
+Right-click "Drive Maps" > "New" > "Mapped Drive"
+
+In this window, we'll set up the same folder location as how we set it up in the previous activity
+
+<img width="394" height="450" alt="image" src="https://github.com/user-attachments/assets/717b8f69-1b1a-4719-8d64-566ed8a737bb" />
+
+After setting the location and drive letter, hit "Apply" and "Ok"
+
+Apply the `Mapped Drives` GPO to the `Canada` > `Users` OU
+
+On the client machine, run `gpupdate /force` to immediately apply the GPO, and then reboot the machine
+
+We'll now see that the `SHARED` folder is automatically mapped as a network drive in the client machine
+
+
+### Activity 4: Implement Quotas and File Screening Using File Server Resource Manager (FSRM)
+
+File Server Resource Manager (FSRM) is a part of the Microsoft admin suite of tools that helps us manage and classify the data that is stored in our file servers and shared folders
+
+On the server machine, we'll need to install FSRM the same way we installed Active Directory
+
+Open up "Server Manage" > "Manage" > "Add Roles and Features"
+
+Click "Next" on each window until we reach the "Server Roles" section
+
+Expand "File and Storage Services (2 of 12 installed)" and "File and iSCSI Services (1 of 11 installed)"
+
+Check the box "File Server Resource Manager", click "Add Features", hit "Next" until we reach the "Confirmation" section, and hit "Install"
+
+We can close the installer after it's done
+
+Open "File Server Resource Manager"
+
+<img width="494" height="214" alt="image" src="https://github.com/user-attachments/assets/20901531-464a-48cc-83df-9d18b024a8a2" />
+
+These are the different settings we can configure for our file server
+
+In "Quota Management", this is where the maximum amount of data our folder limit will be (e.g., a 10 GB limit for the `SHARED` folder)
+
+Expand "Quota Management" > right-click "Quotas" > "Create Quota..."
+
+<img width="396" height="489" alt="image" src="https://github.com/user-attachments/assets/5db6170b-f972-462b-bde6-ecf0715c32e4" />
+
+This is where we can create a customized quota for the `SHARED` folder
+
+In "Quota path:", click "Browse...", navigate to the `SHARED` folder in the `C:\` drive, and hit "OK"
+
+<img width="316" height="316" alt="image" src="https://github.com/user-attachments/assets/660a0916-e8ab-4f37-96a3-c259a65fd2de" />
+
+Check the option "Define custom quota properties", and hit "Custom Properties..."
+
+<img width="485" height="592" alt="image" src="https://github.com/user-attachments/assets/991e7f8d-eaa3-41ae-b901-35d4807566cf" />
+
+Set the "Space limit" > "Limit:" to `1 GB`
+
+In "Notification thresholds", click "Add..."
+
+<img width="487" height="607" alt="image" src="https://github.com/user-attachments/assets/a36d9d3a-286b-4dd3-aea5-2a635e20384c" />
+
+In this window, we can set an email notification when the folder usage limit hits a certain threshold
+
+Set the "Generate notifications when usage reaches (%):" to `80`
+
+Check the box "Send e-mail to the following administrators:", and enter in an email address to receive the notifications (we don't have a Simple Mail Transfer Protocol (SMTP) set up, but we can pretend that we do)
+
+Click "OK" to set up the custom properties, and hit "Create" to create the quota (can save it as a template if you want)
+
+In "File Screening Management", we can control what types of files are allowed in the folder (e.g., `.doc`, `.png`, `.mp3`, `.exe`)
+
+Expand "File Screening Management" > right-click "File Screens" > "Create File Screen..."
+
+<img width="398" height="454" alt="image" src="https://github.com/user-attachments/assets/310712ae-40ec-4187-b5ae-46d0479011fc" />
+
+Just like with creating a quota, we can set the `SHARED` folder as the path, as well as the file types that are allowed/blocked
+
+
+
 
