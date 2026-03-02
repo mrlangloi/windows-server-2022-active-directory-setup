@@ -6,6 +6,7 @@ The following setup guide is derived from East Charmer's [**Installing Active Di
 * Windows Server 2022 ISO https://www.microsoft.com/en-us/evalcenter/download-windows-server-2022
 * VMWare Workstation Pro https://knowledge.broadcom.com/external/article?articleNumber=368667
 
+
 # Creating a Virtual Machine
 
 After installing VMWare Workstation Pro and downloading the Windows Server 2022 ISO, we can begin with setting up a virtual machine that runs Windows Server 2022 by opening up VMWare Workstation Pro and clicking on "Create a New Virtual Machine"
@@ -23,6 +24,7 @@ In the window that specifies disk capacity, just the recommended 60.0 GB and the
 Right-click on the newly created virtual machine and click "Settings". Under "CD/DVD (SATA)" we want to check the box "Connected at power on", set "Connection" to "Use ISO image file:", and browse for the Windows Server 2022 ISO file (SERVER_EVAL_x64FRE-en-us.iso)
 
 <img width="749" height="325" alt="image" src="https://github.com/user-attachments/assets/3f098689-8f9a-4346-818c-ca0c4c497b95" />
+
 
 ## Installing Windows Server 2022 onto the Virtual Machine
 
@@ -44,6 +46,7 @@ After setting up a password, login to the Administrator account using the passwo
 From this point and onwards the Windows Server 2022 180-days free trial kicks in, so once it expires, we can build and install Windows Server 2022 onto a new virtual machine again from scratch
 
 Now, we need to install Active Directory tools
+
 
 # Install Active Directory Tools
 
@@ -92,6 +95,7 @@ Upon logging in as Administrator, we should now see that we are logging in as `-
 
 To verify our installation, we should see the "Windows Administrative Tools" folder in the Windows start menu
 
+
 # Basic Active Directory Setup
 
 Terms to know
@@ -117,7 +121,7 @@ On the left column, we should see the created .local directory which we can expa
 
 We want to create OUs for different departments
 
-Right-click on the domain name > New > Organizational Unit
+Right-click on the domain name > "New" > "Organizational Unit"
 
 <img width="587" height="463" alt="image" src="https://github.com/user-attachments/assets/ade3f8d8-a58e-4221-8a39-187f752256a6" />
 
@@ -133,7 +137,7 @@ Inside each of the geographical OUs created, create 3 OUs under the name `Comput
 
 Next, we want to create different groups under the nested OUs to mimick a typical workplace environment (e.g., different company departments under "Users")
 
-Right-click on `Users` under `Canada` > New > Group
+Right-click on `Users` under `Canada` > "New" > "Group"
 
 <img width="465" height="223" alt="image" src="https://github.com/user-attachments/assets/eb16cba7-638d-41ca-b848-ddeef2d9528a" />
 
@@ -190,6 +194,7 @@ Fill out the form as follows
 <img width="525" height="302" alt="image" src="https://github.com/user-attachments/assets/07506394-614b-421a-891d-1b414bcea6b9" />
 
 Repeat the entire process for the "Europe" and "Asia" OUs (creating the groups and a user)
+
 
 # Creating and Setting up GPOs
 
@@ -379,6 +384,7 @@ Right-click on the newly created virtual machine and click "Settings". Under "CD
 Install Windows 11 Enterprise, just like how we did for the Windows Server 2022
 
 While Windows 11 Enterprise is installing, we want to set our server to use a static IP address
+
 
 ### Setting up a Server Static IP
 
